@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="KupidonClient/KupidonClient.csproj" />
+  <Project Path="KupidonContracts/KupidonContracts.csproj" />
+  <Project Path="KupidonServer/KupidonServer.csproj" />
+</Solution>
