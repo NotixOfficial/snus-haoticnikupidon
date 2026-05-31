@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using KupidonContracts;
 using KupidonServer.Models;
 using KupidonServer.Services;
@@ -71,12 +72,12 @@ public class CupidHub : Hub<ICupidClient>, IPersonService
         return base.OnDisconnectedAsync(exception);
     }
 
+    // validacija preko DataAnnotations atributa na PersonInfo; null ako je sve ok
     private static string? Validate(PersonInfo info)
     {
-        if (string.IsNullOrWhiteSpace(info.Username)) return "Username ne sme biti prazan.";
-        if (string.IsNullOrWhiteSpace(info.City)) return "Grad ne sme biti prazan.";
-        if (info.Age <= 0) return "Godine moraju biti pozitivan broj.";
-        if (string.IsNullOrWhiteSpace(info.Phone)) return "Broj telefona ne sme biti prazan.";
-        return null;
+        var results = new List<ValidationResult>();
+        if (Validator.TryValidateObject(info, new ValidationContext(info), results, validateAllProperties: true))
+            return null;
+        return string.Join(" ", results.Select(r => r.ErrorMessage));
     }
 }
